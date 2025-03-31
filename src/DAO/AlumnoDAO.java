@@ -75,16 +75,17 @@ public class AlumnoDAO {
         String query = "SELECT * FROM alumnos WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return new Alumno(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getInt("edad"),
-                        rs.getString("email")
-                );
+            try(ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {
+                    return new Alumno(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("apellido"),
+                            rs.getInt("edad"),
+                            rs.getString("email")
+                    );
+            }
             }
         } catch (SQLException e) {
             System.err.println("Error al obtener alumno: " + e.getMessage());
